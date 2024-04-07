@@ -52,7 +52,8 @@ class RatingReviewList(generics.ListCreateAPIView):
     serializer_class = serializers.RatingReviewSerializer
 
     def get_queryset(self):
-        if "product_id" in self.request.GET:
+
+        if "product_id" in self.kwargs:
             product_id = self.kwargs["product_id"]
             product = models.Product.objects.get(pk=product_id)
             return models.RatingReview.objects.filter(product=product)

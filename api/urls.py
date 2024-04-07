@@ -19,6 +19,11 @@ urlpatterns = [
     # Buyer
     # Buyer Post and Get
     path("buyer/", views.BuyerList.as_view()),
-    # Individual Buyer Delete, Update And Retrieve
-    path("buyer/<int:pk>", views.SellerDetail.as_view()),
+    # Rating
+    # Buyer POST And GET rating and review
+    path("rating-review/", views.RatingReviewList.as_view()),
+    # Individual Product Rating and Review
+    path("product-rating-review/<int:product_id>", views.RatingReviewList.as_view()),
+    # Buyer rating status(given or not)
+    path("rating-status/<int:buyer_id>/<int:product_id>", views.buyerRatingStatus),
 ]
