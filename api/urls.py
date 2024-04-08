@@ -26,4 +26,13 @@ urlpatterns = [
     path("product-rating-review/<int:product_id>", views.RatingReviewList.as_view()),
     # Buyer rating status(given or not)
     path("rating-status/<int:buyer_id>/<int:product_id>", views.buyerRatingStatus),
+    # Wishlist
+    # Wishlist POST and GET
+    path("wishlist/", views.Wishlist.as_view()),
+    # Individual Student Wishlist
+    path("wishlist/<int:buyer_id>", views.Wishlist.as_view()),
+    # Wishlist Status
+    path("wishlist-status/<int:buyer_id>/<int:product_id>", views.wishlist_status),
+    # Remove from wishlist
+    path("remove-wishlist/<int:buyer_id>/<int:product_id>", views.remove_from_wishlist),
 ]

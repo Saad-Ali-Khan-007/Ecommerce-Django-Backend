@@ -67,3 +67,38 @@ def buyerRatingStatus(request, buyer_id, product_id):
         return JsonResponse({"bool": True})
     else:
         return JsonResponse({"bool": False})
+
+
+class Wishlist(generics.ListCreateAPIView):
+    queryset = models.Wishlist.objects.all()
+    serializer_class = serializers.WishlistSerializer
+
+    def get_queryset(self):
+        if "buyer_id" in self.kwargs:
+            buyer_id = self.kwargs["buyer_id"]
+            buyer = models.Buyer.objects.get(pk=buyer_id)
+            return models.Wishlist.objects.filter(buyer=buyer)
+
+
+def wishlist_status(request, buyer_id, product_id):
+    buyer = models.Buyer.objects.filter(id=buyer_id).first()
+    product = models.Product.objects.filter(id=product_id).first()
+    wishlist_status = models.Wishlist.objects.filter(
+        buyer=buyer, product=product
+    ).first()
+    if wishlist_status:
+        return JsonResponse({"bool": True})
+    else:
+        return JsonResponse({"bool": False})
+
+
+def remove_from_wishlist(request, buyer_id, product_id):
+    buyer = models.Buyer.objects.filter(id=buyer_id).first()
+    product = models.Product.objects.filter(id=product_id).first()
+    remove_from_wishlist = models.Wishlist.objects.filter(
+        buyer=buyer, product=product
+    ).delete()
+    if remove_from_wishlist:
+        return JsonResponse({"bool": True})
+    else:
+        return JsonResponse({"bool": False})

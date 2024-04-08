@@ -37,3 +37,9 @@ class RatingReview(models.Model):
     rating = models.PositiveBigIntegerField(default=0)
     reviews = models.TextField(null=True)
     add_time = models.DateTimeField(auto_now_add=True)
+
+
+class Wishlist(models.Model):
+    buyer = models.ForeignKey(Buyer, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    status = models.BooleanField(default=False)
