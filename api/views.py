@@ -3,6 +3,7 @@ from rest_framework import generics
 from . import models
 from . import serializers
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 
 
 # Seller
@@ -16,6 +17,20 @@ class SellerList(generics.ListCreateAPIView):
 class SellerDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.Seller.objects.all()
     serializer_class = serializers.SellerSerializer
+
+
+@csrf_exempt
+def seller_login(request):
+    email = request.POST["email"]
+    password = request.POST["password"]
+    try:
+        seller_data = models.Seller.objects.get(email=email, password=password)
+    except models.Seller.DoesNotExist:
+        seller_data = None
+    if seller_data:
+        return JsonResponse({"bool": True, "seller_id": seller_data.id})
+    else:
+        return JsonResponse({"bool": False})
 
 
 # Product
@@ -44,6 +59,20 @@ class BuyerList(generics.ListCreateAPIView):
     serializer_class = serializers.BuyerSerializer
 
 
+@csrf_exempt
+def buyer_login(request):
+    email = request.POST["email"]
+    password = request.POST["password"]
+    try:
+        buyer_data = models.Buyer.objects.get(email=email, password=password)
+    except models.Buyer.DoesNotExist:
+        buyer_data = None
+    if buyer_data:
+        return JsonResponse({"bool": True, "seller_id": buyer_data.id})
+    else:
+        return JsonResponse({"bool": False})
+
+
 # Rating
 
 
@@ -67,6 +96,9 @@ def buyerRatingStatus(request, buyer_id, product_id):
         return JsonResponse({"bool": True})
     else:
         return JsonResponse({"bool": False})
+
+
+# Wishlist
 
 
 class Wishlist(generics.ListCreateAPIView):
